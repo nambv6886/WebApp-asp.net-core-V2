@@ -1,0 +1,79 @@
+﻿@model Webapp_v2.Models.Instructor
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Instructor</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control w-75" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control w-75" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HireDate" class="control-label"></label>
+                <input asp-for="HireDate" class="form-control w-75" />
+                <span asp-validation-for="HireDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OfficeAssignment.Location" class="control-label"></label>
+                <input type="text" asp-for="OfficeAssignment.Location" class="form-control w-75"/>
+                <span asp-validation-for="OfficeAssignment.Location" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="">
+                    <table>
+                        <tr>
+                            @{ 
+                                int cnt = 0;
+                                List<Webapp_v2.Models.SchoolViewModels.AssignedCourseData> courses = ViewBag.Courses;
+
+                                foreach (var course in courses)
+                                {
+                                    if(cnt++ % 3 ==0)
+                                    {
+                                        @:</tr><tr>
+                                    }
+                                    @:<td>
+                                              <input type="checkbox" name="selectedCourses" value="@course.CourseID"
+                                                     @Html.Raw(course.Assigned ? "checked=\"check\"" : "") />
+                                              
+                                                  <span class="">@course.CourseID</span> <span class="">@course.Title</span>
+                                              
+
+                                          
+                                @:</td>
+                                }
+                                @:</tr>
+                            }
+                        
+                    </table>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary w-25" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

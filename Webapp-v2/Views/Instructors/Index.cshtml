@@ -1,0 +1,130 @@
+﻿@model Webapp_v2.Models.SchoolViewModels.InstructorIndexData
+
+@{
+    ViewData["Title"] = "Instructor";
+}
+
+<h1>Instructor</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-striped mb-5">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                Last Name
+            </th>
+            <th>
+                First Name
+            </th>
+            <th>
+                Hire Date
+            </th>
+            <th>Office</th>
+            <th>Courses</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Instructors)
+        {
+
+            string selectedRow = "";
+            string selected = "";
+            if (item.ID == (int?)ViewData["InstructorID"])
+            {
+                selectedRow = "bg-success text-white";
+                selected = "text-white";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HireDate)
+                </td>
+                <td>
+                    @if (item.OfficeAssignment != null)
+                    {
+                        @item.OfficeAssignment.Location
+                    }
+
+                </td>
+                <td>
+                    @{
+                        foreach (var course in item.CourseAssignments)
+                        {
+                            @course.Course.CourseID @: @course.Course.Title <br />
+                        }
+                    }
+                </td>
+                <td>
+                    <a asp-action="Index" asp-route-id="@item.ID" class="@selected">Select</a> |
+                    <a asp-action="Edit" asp-route-id="@item.ID" class="@selected">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID" class="@selected">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID" class="@selected">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Courses != null)
+{
+<div class="mb-5">
+    <h3>Course taught by selected Instructor</h3>
+    <table class="table table-striped">
+        <tr class="thead-dark">
+            <th></th>
+            <th>Number</th>
+            <th>Title</th>
+            <th>Department</th>
+        </tr>
+        @foreach (var item in Model.Courses)
+        {
+            string selectedRow = "";
+            string selected = "";
+            if (item.CourseID == (int?)ViewData["CourseID"])
+            {
+                selectedRow = "bg-success text-white";
+                selected = "text-white";
+            }
+
+            <tr class="@selectedRow">
+                <td class="@selected">
+                    <a asp-action="Index" asp-route-id="@item.CourseID" class="@selected">Select</a>
+                </td>
+                <td>@item.CourseID</td>
+                <td>@item.Title</td>
+                <td>@item.Department.Name</td>
+            </tr>
+        }
+    </table>
+</div>
+}
+
+@if(Model.Enrollments != null)
+{
+    <h3>Students enrollment in selected course</h3>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Name</th>
+                <th>Grade</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Enrollments)
+            {
+                <tr>
+                    <td>@item.Student.FullName</td>
+                    <td>@item.Grade</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
