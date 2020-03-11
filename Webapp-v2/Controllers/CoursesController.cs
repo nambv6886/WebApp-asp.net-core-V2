@@ -16,6 +16,7 @@ namespace Webapp_v2.Controllers
 
         public CoursesController(SchoolContext context)
         {
+            // create context
             _context = context;
         }
 
